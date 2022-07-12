@@ -80,16 +80,9 @@ public sealed class GameController: MonoBehaviour
 
     private void GiveRandomBooster()
     {
-        int randomMonsterNumber = Random.Range(0, _boosters.Count);
+        int randomBoosterNumber = Random.Range(0, _boosters.Count);
 
-        if (_boosters[randomMonsterNumber].activeInHierarchy == true)
-        {
-            GiveRandomBooster();
-        }
-        else
-        {
-            _boosters[randomMonsterNumber].SetActive(true);
-        }
+        _boosters[randomBoosterNumber].SetActive(true);
     }
 
     public void KilAllByBooster()

@@ -16,6 +16,10 @@ public class MonsterSpawner : MonoBehaviour
 
     public static Action OnMonsterSpawned;
 
+    private const float DIFFICULTY_DELTA_MULTIPLIER = 0.1f;
+    private const float MIN_SPAWN_INTERVAL = 2f;
+    private const float MAX_SPAWN_INTERVAL = 4f;
+
     private void Start()
     {
         GameController.KillAllMonsters += DestroyMonsters;
@@ -35,9 +39,9 @@ public class MonsterSpawner : MonoBehaviour
     {
         if (isSpawnEnable)
         {
-            float difficultyDelta = GameController.DifficultyLevel * 0.1f;
+            float difficultyDelta = GameController.DifficultyLevel * DIFFICULTY_DELTA_MULTIPLIER;
 
-            float interval = Random.Range(2f - difficultyDelta, 4f - difficultyDelta);
+            float interval = Random.Range(MIN_SPAWN_INTERVAL - difficultyDelta, MAX_SPAWN_INTERVAL - difficultyDelta);
 
             yield return new WaitForSeconds(interval);
 
@@ -54,8 +58,8 @@ public class MonsterSpawner : MonoBehaviour
 
     private void SpawnMonster()
     {
-        Quaternion _rotation = Quaternion.Euler(0f, 0f, 0f);
-        GameObject spawnedMoster =  Instantiate(randomMonsterFromList(), RandomPosition(), _rotation);
+        Quaternion _rotation = Quaternion.identity;
+        GameObject spawnedMoster =  Instantiate(randomMonsterFromList(), RandomPositionOnDesk(), _rotation);
         spawnedMoster.transform.LookAt(_observerPosition);
 
         _spawnedMonsters.Add(spawnedMoster);
@@ -96,7 +100,7 @@ public class MonsterSpawner : MonoBehaviour
         return _monsters[monsterNumber];
     }
 
-    private Vector3 RandomPosition()
+    private Vector3 RandomPositionOnDesk()
     {
         float x = Random.Range(3.32f, 3.9f);
         float z = Random.Range(-0.8f, -0.3f);
